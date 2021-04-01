@@ -33,7 +33,7 @@ class Equirect2Adaptive(nn.Module):
       idx = 1
       while True:
         position = center + strides[i] * idx
-        if w <= position:
+        if w <= position or w <= center + idx:
           break
         grid[i, center + idx] = [i, position]
         idx += 1
@@ -41,7 +41,7 @@ class Equirect2Adaptive(nn.Module):
       idx = 1
       while True:
         position = center - strides[i] * idx
-        if position < 0:
+        if position < 0 or center - idx < 0:
           break
         grid[i, center - idx] = [i, position]
         idx += 1
@@ -111,7 +111,7 @@ if __name__ == '__main__':
   image = np.expand_dims(image, 0)
   image = torch.from_numpy(image).float()
 
-  out = Equirect2Adaptive(h, w).forward(image)
+  out = Equirect2Adaptive().forward(image)
   out = np.squeeze(out.numpy(), 0).transpose([1, 2, 0])
 
   plt.imsave("equirect2mollweide.png", out)

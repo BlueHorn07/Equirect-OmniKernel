@@ -37,7 +37,15 @@ x = F.grid_sample(x, grid, align_corners=True, mode='bilinear')
 ChiWeiHsiao의 코드는 구현 상의 문제로 3x3 conv를 사용했으나 본인의 경우 일반적인 nxm kernel을 사용할 수 있으므로 5x5 conv를 사용하도록 했다.
 (3x3 conv를 사용할 경우 91% ACC가 나와서 `Conventional CNN`과 동일한 ACC를 보이지만, 5x5 conv를 사용하면 `SphereCNN`과 동일한 94% ACC를 보인다.)
 
+3\. `np.round()` 제거 & 완전한 mollweide
 
+기존에 `utils.py`의 `next_steps = np.round(next_steps * width)` 부분의 `np.round()`를 제거한 결과 보다 매끄럽고 완전한 형태의 mollweide 이미지를 얻을 수 있었다.
+
+그외에 `Equirect2Adaptive.py`의 `generateGrid()`에서 조건식이 하나 추가되었지만, discretization 과는 별개의 작업이다.
+
+![no-round](./images/equirect2mollweide.png)
+
+![e2m](./images/ERP2Mollweide.png)
 
 
 

@@ -15,6 +15,7 @@ def generateStrides(height, width):
 
   next_steps = np.arctan(tan_nu / np.cos(lat_range))
   next_steps = 0.5 + (next_steps / (2 * np.pi))
-  next_steps = np.round(next_steps * width)  # <- discretization
+  # next_steps = np.round(next_steps * width)  # <- discretization
+  next_steps = next_steps * width  # remove `np.round()`!
   strides = next_steps - center
   return strides  # (H, )
