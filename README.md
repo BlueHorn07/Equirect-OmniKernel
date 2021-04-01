@@ -47,5 +47,20 @@ ChiWeiHsiao의 코드는 구현 상의 문제로 3x3 conv를 사용했으나 본
 
 ![e2m](./images/ERP2Mollweide.png)
 
+만약 omni-MNIST에서 e2m이 잘 동작하는지 확인하려면, 아래의 코드를 사용하자.
+
+```python
+from matplotlib import pyplot as plt
+
+img = x[30].permute(1, 2, 0)
+plt.imshow(img)
+plt.show()
+
+x = self.e2a(x)
+
+img = x[30].permute(1, 2, 0)
+plt.imshow(img)
+plt.show()
+```
 
 
