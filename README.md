@@ -18,6 +18,8 @@ SphereNet(ECCV2018)을 구현한 ChiWeiHsiao의 [SphereNet-pytorch](https://gith
 | AdpativeNet ( our; 3x3 ) | 91% |
 | EquirectCNN ( ChiWeiHsiao / our )| 91% |
 
+![no-round](./images/mollweideCNN_plot.png)
+
 ## Detail
 
 1\. `F.grid_sample()` 옵션
