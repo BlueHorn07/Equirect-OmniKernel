@@ -1,15 +1,12 @@
 import numpy as np
 
-from .utils import generateStrides
-
 
 class MaskGenerator:
-  def __init__(self, h, w):
+  def __init__(self, h, w, strides):
     self.height = h
     self.width = w
     self.center = self.width // 2
 
-    strides = generateStrides(self.height, self.width)
     self.counts = (self.width // strides) // 2  # (H, )
     distance = np.arange(0, self.width) - self.center
     self.ratios = [distance / cnt for cnt in self.counts]  # (H, W)
@@ -31,8 +28,8 @@ class MaskGenerator:
     return mask  # (H, W)
 
 
-class AdaptiveGridGenerator:
-  def __init__(self, h, w, kernel_size=3, stride=1):
+class OmniGridGenerator:
+  def __init__(self, h, w, strides, kernel_size=3, stride=1):
     self.height = h
     self.width = w
     self.center = self.width // 2
@@ -44,7 +41,6 @@ class AdaptiveGridGenerator:
     if isinstance(stride, int):
       self.stride = (stride, stride)
 
-    strides = generateStrides(self.height, self.width)
     self.counts = (self.width // strides) // 2  # (H, )
     distance = np.arange(0, self.width) - self.center
     self.ratios = [distance / cnt for cnt in self.counts]  # (H, W)
@@ -93,7 +89,7 @@ class AdaptiveGridGenerator:
     counts = self.counts[range_lat]  # (Kh, )
     ratio = self.ratios[lat][lon]  # scalar
 
-    if (ratio < -1.0) or (ratio >= 1.0):  # given position is over the adaptive area
+    if (ratio < -1.0) or (ratio >= 1.0):  # given position is over the omni area
       return np.full((Kh, Kw, 2), self.width)  # (H, W, Kh, Kw, 2)
 
     lons = center + np.round(ratio * counts)  # (Kw, )

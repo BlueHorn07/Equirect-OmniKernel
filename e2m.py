@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import torch
 
-from adaptive import Equirect2Adaptive
+from omni import Equirect2Omni
 
 """
 np.round()를 제거하면서 부수적으로 얻은 ERP2Mollweide의 demo 코드이다.
@@ -19,7 +19,7 @@ if __name__ == '__main__':
   src_image = np.expand_dims(src_image, 0)
   src_image = torch.from_numpy(src_image).float()
 
-  out = Equirect2Adaptive().forward(src_image)
+  out = Equirect2Omni().forward(src_image)
   out = np.squeeze(out.numpy(), 0).transpose([1, 2, 0])
 
   cv2.imwrite("./images/ERP2Mollweide.png", out)

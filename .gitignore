@@ -133,3 +133,4 @@ dmypy.json
 datas/
 *.pkl
 log.txt
+.vscode/settings.json

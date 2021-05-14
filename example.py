@@ -5,17 +5,17 @@ from torch import nn
 import torch.nn.functional as F
 import numpy as np
 
-from adaptive import AdaptiveConv2d, AdaptiveMaxPool2d, Equirect2Adaptive
+from omni import OmniConv2d, OmniMaxPool2d, Equirect2Omni
 
 
-class MollWeideNet(nn.Module):
+class OmniNet(nn.Module):
   def __init__(self):
-    super(MollWeideNet, self).__init__()
-    self.e2a = Equirect2Adaptive()
-    self.conv1 = AdaptiveConv2d(1, 32, kernel_size=5, stride=1)  # 논문에서 conv-kernel 사이즈가 5x5라고 나오넹
-    self.pool1 = AdaptiveMaxPool2d(stride=2)
-    self.conv2 = AdaptiveConv2d(32, 64, kernel_size=5, stride=1)
-    self.pool2 = AdaptiveMaxPool2d(stride=2)
+    super(OmniNet, self).__init__()
+    self.e2a = Equirect2Omni()
+    self.conv1 = OmniConv2d(1, 32, kernel_size=5, stride=1)  # 논문에서 conv-kernel 사이즈가 5x5라고 나오넹
+    self.pool1 = OmniMaxPool2d(stride=2)
+    self.conv2 = OmniConv2d(32, 64, kernel_size=5, stride=1)
+    self.pool2 = OmniMaxPool2d(stride=2)
 
     self.fc = nn.Linear(64 * 15 * 15, 10)
 
@@ -116,19 +116,19 @@ def main():
   test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
   # Train
-  adaptiveStride_model = MollWeideNet().to(device)
+  omni_model = OmniNet().to(device)
   if args.optimizer == 'adam':
-    adaptiveStride_optimizer = torch.optim.Adam(adaptiveStride_model.parameters(), lr=args.lr)
+    omni_optimizer = torch.optim.Adam(omni_model.parameters(), lr=args.lr)
   elif args.optimizer == 'sgd':
-    adaptiveStride_optimizer = torch.optim.SGD(adaptiveStride_model.parameters(), lr=args.lr, momentum=args.momentum)
+    omni_optimizer = torch.optim.SGD(omni_model.parameters(), lr=args.lr, momentum=args.momentum)
 
   for epoch in range(1, args.epochs + 1):
-    # AdaptiveCNN
-    print('{} AdaptiveStride CNN {}'.format('=' * 10, '=' * 10))
-    train(args, adaptiveStride_model, device, train_loader, adaptiveStride_optimizer, epoch)
-    test(args, adaptiveStride_model, device, test_loader)
+    # OmniCNN
+    print('{} OmniCNN {}'.format('=' * 10, '=' * 10))
+    train(args, omni_model, device, train_loader, omni_optimizer, epoch)
+    test(args, omni_model, device, test_loader)
     if epoch % args.save_interval == 0:
-      torch.save(adaptiveStride_model.state_dict(), 'adaptiveStride_model.pkl')
+      torch.save(omni_model.state_dict(), 'Omni_model.pkl')
 
 
 if __name__ == '__main__':

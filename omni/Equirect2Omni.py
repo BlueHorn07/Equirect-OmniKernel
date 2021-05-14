@@ -7,9 +7,9 @@ import matplotlib.pyplot as plt
 from .utils import generateStrides
 
 
-class Equirect2Adaptive(nn.Module):
+class Equirect2Omni(nn.Module):
   def __init__(self):
-    super(Equirect2Adaptive, self).__init__()
+    super(Equirect2Omni, self).__init__()
     self.grid_shape = None
     self.grid = None
 
@@ -111,7 +111,7 @@ if __name__ == '__main__':
   image = np.expand_dims(image, 0)
   image = torch.from_numpy(image).float()
 
-  out = Equirect2Adaptive().forward(image)
+  out = Equirect2Omni().forward(image)
   out = np.squeeze(out.numpy(), 0).transpose([1, 2, 0])
 
   plt.imsave("equirect2mollweide.png", out)
